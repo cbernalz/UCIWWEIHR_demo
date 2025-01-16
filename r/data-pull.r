@@ -177,37 +177,3 @@ write_csv(
 cat("Wastewater data pulled and saved...\n")
 
 
-## Cases
-cat("Pulling case data...\n")
-
-quiet <- function(x) {
-  sink(tempfile())
-  on.exit(sink())
-  invisible(force(x))
-}
-
-
-ckanr_setup(url="https://data.chhs.ca.gov")
-#ckan <- quiet(ckanr::src_ckan("https://data.ca.gov"))
-
-# get resources
-resources <- rbind(resource_search("name:Respiratory", as = "table")$results)
-
-
-cases_deaths_url <- resources %>% filter(name == "Respiratory Virus Dashboard Metrics: Testing") %>% pull(url)
-
-cases <-
-  read_csv(cases_deaths_url) %>%
-  mutate(date = lubridate::ymd(date),
-         positive_tests = as.integer(positive_tests),
-         total_tests = as.integer(total_tests)) %>%
-  select(date,
-         tests = total_tests,
-         cases = positive_tests,
-         county = area) %>%
-  arrange(date, county)
-
-
-write_csv(cases, here::here("data","case-data.csv"))
-
-cat("Case data pulled and saved...\n")
