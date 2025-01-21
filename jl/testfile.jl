@@ -209,11 +209,11 @@ function main()
     # Saving raw model output
     println("Saving raw model output...")
     ## Posterior Predictive
-    CSV.write("data/results/model-output-pp.csv", model_output[1])
+    CSV.write("results/model-output-pp.csv", model_output[1])
     ## Generated Quantities
-    CSV.write("data/results/model-output-gq.csv", model_output[2])
+    CSV.write("results/model-output-gq.csv", model_output[2])
     ## Samples
-    CSV.write("data/results/model-output-samples.csv", model_output[3])
+    CSV.write("results/model-output-samples.csv", model_output[3])
 
     ## Formatting forecast object
     println("Formatting forecast object...")
@@ -223,8 +223,8 @@ function main()
     forecast_obj_forecast_only = forecast_obj_full[!, forecast_obstime_start:forecast_obstime_end]
     # Saving forecast object
     println("Saving forecast object...")
-    CSV.write("data/results/forecast-obj-full.csv", forecast_obj_full)
-    CSV.write("data/results/forecast-obj-forecast-only.csv", forecast_obj_forecast_only)
+    CSV.write("results/forecast-obj-full.csv", forecast_obj_full)
+    CSV.write("results/forecast-obj-forecast-only.csv", forecast_obj_forecast_only)
 
     ## Formatting nowcast object
     println("Formatting nowcast object...")
@@ -232,8 +232,8 @@ function main()
     nowcast_obj_wo_init_rt = nowcast_obj_full[:, 2:end]
     # Saving nowcast object
     println("Saving nowcast object...")
-    CSV.write("data/results/nowcast-obj-full.csv", nowcast_obj_full)
-    CSV.write("data/results/nowcast-obj-wo-init-rt.csv", nowcast_obj_wo_init_rt)
+    CSV.write("results/nowcast-obj-full.csv", nowcast_obj_full)
+    CSV.write("results/nowcast-obj-wo-init-rt.csv", nowcast_obj_wo_init_rt)
 
     ## Using visualizer to see quick plots
     println("Using visualizer to see quick plots...")
