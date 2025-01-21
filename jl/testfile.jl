@@ -1,9 +1,4 @@
-using RCall, DataFrames, CSV, Dates, LogExpFunctions, UCIWWEIHR ## Packages required *UCIWEIHR is Model*
-
-function data_pull_wrap()
-    #### Function that calls an R script to pull data if required
-    R"source('r/data-pull.r')"
-end
+using DataFrames, CSV, Dates, LogExpFunctions, UCIWWEIHR ## Packages required *UCIWEIHR is Model*
 
 function prep_hosp_df(
     df::DataFrame, 
@@ -106,9 +101,6 @@ function format_for_eval(df, desired_var::String)
 end
 
 function main()
-    # Data pull - using R
-    #println("Pulling data...")
-    #data_pull_wrap()
 
     # Read in the data
     println("Reading in data...")
