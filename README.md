@@ -14,6 +14,8 @@ formatted output.  Forecast object that only has desired forecasted dates is in
 the [forecast-obj-forecast-only csv](/results/forecast-obj-forecast-only.csv).
 Nowcast object that only has desired weekly Rt's is in the [nowcast-obj-wo-init-rt csv](/results/nowcast-obj-wo-init-rt.csv).
 
+`plots` folder contains plots of the model output.
+
 `data-pull.r` file in the `r` folder is the file that pulls the data from the
 below sites.
 
@@ -29,11 +31,19 @@ To pull the data, run the `data-pull.r` script in the `r` folder.  This script c
 In a julia REPL, run the following commands to install package and this repo's dependencies:
 ```julia
 using Pkg
-Pkg.add(["DataFrames", "CSV", "Dates", "LogExpFunctions"])
+Pkg.add(["DataFrames", "CSV", "Dates", "LogExpFunctions", "ArgParse", "FilePathsBase"])
 Pkg.add(url="https://github.com/cbernalz/UCIWWEIHR.jl.git")
 ```
 ### 3. Running [testfile](jl/testfile.jl) script :
-This script can be run in vscode or using a terminal.  For vscode, open the folder in vscode and run the script.  For a terminal, open a terminal and be in repo's root directory.  Then run the following commands in the terminal : `julia jl/testfile.jl`.
+This script can be run in a terminal.  For a terminal, open a terminal and be in repo's root directory.  Then run the following commands in the terminal : `julia jl/testfile.jl --help` to understand the arguments that go into the script from the terminal.  Specifying all arguments is not necessary, but if desired will be of the form, 
+
+`julia jl/testfile.jl --hosp_df_path "data/hosp-data.csv" --ww_df_path "data/ww-data.csv" --result_path "results/" --plot_result_path "plots/" --county "Los Angeles" --n_samples 250 --forecast_horizon 7 --start_date "2024-07-21" --end_date "2024-09-22" --verbose`.  *This was run to produce results and plots repo currently*
+
+A more condensed version, if only specifying required arguments will be of the form, 
+
+`julia jl/testfile.jl --hosp_df_path "data/hosp-data.csv" --ww_df_path "data/ww-data.csv" --result_path "results/" --county "Los Angeles" --n_samples 250`
+
+In this simple version, only result df's will be saved and plots are not.
 
 ---
 # Created by : The Minin Group
