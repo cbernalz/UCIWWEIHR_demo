@@ -124,6 +124,10 @@ function parse_commandline()
             help="Number of samples to draw from the posterior"
             arg_type=Int
             default=50
+        "--n_discard_initial"
+            help="Number of samples to discard from the beginning of the chain"
+            arg_type=Int
+            default=25
         "--forecast_horizon"
             help="Number of days to forecast"
             arg_type=Int
@@ -156,6 +160,7 @@ function main()
     plot_result_path = parsed_args["plot_result_path"]
     county = parsed_args["county"]
     n_samples = parsed_args["n_samples"]
+    n_discard_initial = parsed_args["n_discard_initial"]
     forecast_horizon = parsed_args["forecast_horizon"]
     start_date = parsed_args["start_date"]
     end_date = parsed_args["end_date"]
@@ -171,6 +176,7 @@ function main()
         println("--plot_result_path: $plot_result_path")
         println("--county: $county")
         println("--n_samples: $n_samples")
+        println("--n_discard_initial: $n_discard_initial")
         println("--forecast_horizon: $forecast_horizon")
         println("--start_date: $start_date")
         println("--end_date: $end_date")
@@ -223,8 +229,6 @@ function main()
     # Setting parameters for function
     println("Setting function parameters...")
     priors_only = false
-    n_discard_initial = n_samples / 2
-    n_discard_initial = floor(Int, n_discard_initial)
     forecast = true
     data_hosp = prepped_hosp_df.hospitalizations
     data_wastewater = prepped_ww_df.log_conc
@@ -246,7 +250,7 @@ function main()
         epsilon_sd=0.04, log_epsilon_mean=log(1/5),
         rho_gene_sd=1.0, log_rho_gene_mean=log(1),
         sigma_ww_sd=0.05, log_sigma_ww_mean=log(0.44),
-        sigma_hosp_sd=43.0, sigma_hosp_mean=130.0,
+        sigma_hosp_sd=0.01, log_sigma_hosp_mean=log(130.0),
         Rt_init_sd=0.1, Rt_init_mean=log(1.1),
         sigma_Rt_sd=0.2, sigma_Rt_mean=-3.0,
         w_init_sd=0.5, w_init_mean=logit(0.03),
