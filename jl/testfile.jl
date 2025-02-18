@@ -43,8 +43,8 @@ function prep_ww_df(
     end_date=nothing
 )
     # Prelims
-    start_date = start_date === nothing ? minimum(df[!, "date"]) : Date(start_date)
-    end_date = end_date === nothing ? maximum(df[!, "date"]) : Date(end_date)
+    start_date = start_date === nothing ? Date(minimum(df[!, "date"]), "yyyy-mm-ddTHH:MM:SSZ") : Date(start_date)
+    end_date = end_date === nothing ? Date(maximum(df[!, "date"]), "yyyy-mm-ddTHH:MM:SSZ") : Date(end_date)
 
     # Filter df
     df[!,:date] = Date.(df.date, "yyyy-mm-ddTHH:MM:SSZ")
@@ -218,10 +218,16 @@ function main()
     #county = "Los Angeles"
     prepped_hosp_df = prep_hosp_df(hosp_df, county, start_date, end_date)
     last_observed_date = maximum(prepped_hosp_df.date)
+    first_observed_date = minimum(prepped_hosp_df.date)
     if end_date === nothing 
         # Check for ensurance that prepped_hosp_df last date is used if nothing is provided to end_date
         end_date = last_observed_date
         println("End date not provided, using last observed date in hosp data: $end_date")
+    end
+    if start_date === nothing
+        # Check for ensurance that prepped_hosp_df first date is used if nothing is provided to start_date
+        start_date = first_observed_date
+        println("Start date not provided, using first observed date in hosp data: $start_date")
     end
     prepped_ww_df = prep_ww_df(ww_df, county, start_date, end_date)
 
@@ -247,8 +253,8 @@ function main()
         H_init_sd=0.2, log_H_init_mean=init_params.log_H_init_mean,
         gamma_sd=0.04, log_gamma_mean=log(1/2),
         nu_sd=0.04, log_nu_mean=log(1/6),
-        epsilon_sd=0.04, log_epsilon_mean=log(1/5),
-        rho_gene_sd=1.0, log_rho_gene_mean=log(1),
+        epsilon_sd=0.04, log_epsilon_mean=log(1/6),
+        rho_gene_sd=0.5, log_rho_gene_mean=log(50),
         sigma_ww_sd=0.05, log_sigma_ww_mean=log(0.44),
         sigma_hosp_sd=0.01, log_sigma_hosp_mean=log(130.0),
         Rt_init_sd=0.1, Rt_init_mean=log(1.1),
